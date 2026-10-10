@@ -1,6 +1,7 @@
 """Анализ каталога фильмов стримингового сервиса на чистом Python."""
 
 import math
+from collections.abc import Iterator
 from typing import TypedDict
 
 
@@ -328,6 +329,43 @@ def genres_only_in_one(movies_a: list[Movie], movies_b: list[Movie]) -> set[str]
     {'mystery'}
     """
     return all_genres(movies_a) - all_genres(movies_b)
+
+
+# --- Этап 8. Итераторы и генераторы ---
+
+
+def iter_high_rated(movies: list[Movie], min_rating: float = 8.0) -> Iterator[Movie]:
+    """Лениво отдаёт фильмы с рейтингом не ниже min_rating через yield.
+
+    >>> [movie["title"] for movie in iter_high_rated(movies)]
+    ['The Dune Chronicles', 'midnight in oslo', 'The Quiet Algorithm']
+    """
+    for movie in movies:
+        if movie["rating"] >= min_rating:
+            yield movie
+
+
+def print_high_rated(movies: list[Movie], min_rating: float = 8.0) -> None:
+    """Печатает строки отчёта для фильмов с рейтингом не ниже min_rating.
+
+    >>> print_high_rated(movies)
+    "The Dune Chronicles" (2021) — 8.6/10, 2ч 35м, жанры: drama, sci-fi
+    "Midnight In Oslo" (2020) — 8.9/10, 2ч 4м, жанры: mystery, thriller
+    "The Quiet Algorithm" (2024) — 9.2/10, 1ч 58м, жанры: drama, sci-fi
+    """
+    for movie in iter_high_rated(movies, min_rating):
+        print(format_report_line(movie))
+
+
+def total_duration_above(movies: list[Movie], min_rating: float = 7.0) -> int:
+    """Суммирует длительность фильмов с рейтингом выше min_rating в минутах.
+
+    >>> total_duration_above(movies)
+    713
+    """
+    return sum(
+        movie["duration_min"] for movie in movies if movie["rating"] > min_rating
+    )
 
 
 def main():
