@@ -368,9 +368,81 @@ def total_duration_above(movies: list[Movie], min_rating: float = 7.0) -> int:
     )
 
 
-def main():
-    print("Hello from catalog-analysis!")
+# --- Этап 9. Итоговый отчёт ---
+
+
+def build_report(movies: list[Movie]) -> None:
+    """Печатает итоговый отчёт по каталогу из результатов всех этапов.
+
+    >>> build_report(movies)
+    ОТЧЁТ ПО КАТАЛОГУ
+    Средний рейтинг: 7.2
+    Средний возраст фильмов: 8 лет
+    <BLANKLINE>
+    Топ-3 фильма:
+      "The Quiet Algorithm" (2024) — 9.2/10, 1ч 58м, жанры: drama, sci-fi
+      "Midnight In Oslo" (2020) — 8.9/10, 2ч 4м, жанры: mystery, thriller
+      "The Dune Chronicles" (2021) — 8.6/10, 2ч 35м, жанры: drama, sci-fi
+    <BLANKLINE>
+    Фильмов по жанрам:
+      drama — 5
+      comedy — 3
+      sci-fi — 3
+      thriller — 3
+      action — 2
+      mystery — 1
+    <BLANKLINE>
+    Все жанры каталога: action, comedy, drama, mystery, sci-fi, thriller
+    """
+    _, _, average_age = catalog_age_stats(movies)
+
+    print("ОТЧЁТ ПО КАТАЛОГУ")
+    print(f"Средний рейтинг: {average_rating(movies)}")
+    print(f"Средний возраст фильмов: {average_age} лет")
+    print()
+    print("Топ-3 фильма:")
+    for movie in top_movies(movies):
+        print(f"  {format_report_line(movie)}")
+    print()
+    print("Фильмов по жанрам:")
+    counts = count_by_genre(movies)
+    by_count = sorted(counts.items(), key=lambda item: (-item[1], item[0]))
+    for genre, count in by_count:
+        print(f"  {genre} — {count}")
+    print()
+    print(f"Все жанры каталога: {', '.join(sorted(all_genres(movies)))}")
+
+
+def run_demos(movies: list[Movie]) -> None:
+    """Демонстрирует работу циклов и генераторов на каталоге."""
+    print()
+    print("ДЕМОНСТРАЦИЯ: ЦИКЛЫ И ГЕНЕРАТОРЫ")
+    print()
+
+    print("Фильмы без жанра «comedy»:")
+    print_non_comedy_titles(movies)
+    print()
+
+    print("Поиск первого шедевра (рейтинг выше 9.0):")
+    find_first_masterpiece(movies)
+    print()
+
+    print("Поиск шедевра в каталоге без шедевров:")
+    no_masterpieces = [m for m in movies if m["rating"] <= 9.0]
+    find_first_masterpiece(no_masterpieces)
+    print()
+
+    print(f"Фильмов длиннее 120 минут: {count_long_movies(movies)}")
+    print()
+
+    print("Фильмы с рейтингом не ниже 8.0:")
+    print_high_rated(movies)
+    print()
+
+    total = total_duration_above(movies)
+    print(f"Суммарная длительность фильмов с рейтингом выше 7.0: {total} мин")
 
 
 if __name__ == "__main__":
-    main()
+    build_report(movies)
+    run_demos(movies)
