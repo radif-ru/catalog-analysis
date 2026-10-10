@@ -297,6 +297,39 @@ def above_average_ratings(movies: list[Movie]) -> dict[str, float]:
     }
 
 
+# --- Этап 7. Множества ---
+
+
+def all_genres(movies: list[Movie]) -> set[str]:
+    """Возвращает множество всех уникальных жанров каталога.
+
+    >>> sorted(all_genres(movies))
+    ['action', 'comedy', 'drama', 'mystery', 'sci-fi', 'thriller']
+    """
+    genres: set[str] = set()
+    for movie in movies:
+        genres |= movie["genres"]
+    return genres
+
+
+def common_actors(movie1: Movie, movie2: Movie) -> set[str]:
+    """Возвращает множество актёров, снявшихся в обоих фильмах.
+
+    >>> common_actors(movies[0], movies[3])
+    {'O. Isaac'}
+    """
+    return set(movie1["actors"]) & set(movie2["actors"])
+
+
+def genres_only_in_one(movies_a: list[Movie], movies_b: list[Movie]) -> set[str]:
+    """Возвращает жанры, которые есть в movies_a, но отсутствуют в movies_b.
+
+    >>> genres_only_in_one(movies[5:6], movies[:5])
+    {'mystery'}
+    """
+    return all_genres(movies_a) - all_genres(movies_b)
+
+
 def main():
     print("Hello from catalog-analysis!")
 
