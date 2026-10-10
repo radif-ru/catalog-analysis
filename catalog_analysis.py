@@ -78,6 +78,52 @@ def duration_in_hours(minutes: int) -> str:
     return f"{minutes // 60}ч {minutes % 60}м"
 
 
+# --- Этап 2. Условия и match ---
+
+
+def rating_tier(rating: float) -> str:
+    """Возвращает категорию оценки: «шедевр», «хорошо», «средне» или «слабо».
+
+    >>> rating_tier(9.0)
+    'шедевр'
+    >>> rating_tier(8.9)
+    'хорошо'
+    >>> rating_tier(7.0)
+    'хорошо'
+    >>> rating_tier(5.0)
+    'средне'
+    >>> rating_tier(4.9)
+    'слабо'
+    """
+    if rating >= 7:
+        return "шедевр" if rating >= 9 else "хорошо"
+    elif rating >= 5:
+        return "средне"
+    else:
+        return "слабо"
+
+
+def decade_label(year: int) -> str:
+    """Возвращает метку периода выпуска: «новые», «недавние» или «старые».
+
+    >>> decade_label(2021)
+    'новые'
+    >>> decade_label(2020)
+    'недавние'
+    >>> decade_label(2015)
+    'недавние'
+    >>> decade_label(2014)
+    'старые'
+    """
+    match year:
+        case _ if year > 2020:
+            return "новые"
+        case _ if year >= 2015:
+            return "недавние"
+        case _:
+            return "старые"
+
+
 def main():
     print("Hello from catalog-analysis!")
 
