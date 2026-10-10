@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10
+
+      - name: Sync dependencies
+        run: uv sync --locked
+
+      - name: Lint with ruff
+        run: uv run ruff check .
+
+      - name: Check formatting with ruff
+        run: uv run ruff format --check .
+
+      - name: Run catalog analysis
+        run: uv run catalog_analysis.py
+
+      - name: Run doctests
+        run: uv run python -m doctest catalog_analysis.py
