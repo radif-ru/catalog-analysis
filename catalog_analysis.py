@@ -124,6 +124,68 @@ def decade_label(year: int) -> str:
             return "старые"
 
 
+# --- Этап 3. Циклы ---
+
+
+def print_non_comedy_titles(movies: list[Movie]) -> None:
+    """Печатает названия фильмов, не относящихся к жанру «comedy».
+
+    >>> print_non_comedy_titles(movies)
+    The Dune Chronicles
+    silent hours
+    Comet Racers
+    midnight in oslo
+    Garden of Static
+    The Quiet Algorithm
+    Red Harbor
+    """
+    for movie in movies:
+        if "comedy" in movie["genres"]:
+            continue
+        print(movie["title"])
+
+
+def find_first_masterpiece(movies: list[Movie], threshold: float = 9.0) -> Movie | None:
+    """Ищет первый по порядку фильм с рейтингом выше threshold.
+
+    Цикл while прерывается через break при первой находке; ветка else
+    срабатывает, когда подходящих фильмов в списке нет.
+
+    >>> found = find_first_masterpiece(movies)
+    Первый шедевр: "The Quiet Algorithm" — 9.2
+    >>> found["title"]
+    'The Quiet Algorithm'
+    >>> find_first_masterpiece([m for m in movies if m["rating"] <= 9.0])
+    Шедевров не найдено
+    """
+    index = 0
+    while index < len(movies):
+        movie = movies[index]
+        if movie["rating"] > threshold:
+            print(f'Первый шедевр: "{movie["title"]}" — {movie["rating"]}')
+            break
+        index += 1
+    else:
+        print("Шедевров не найдено")
+        return None
+    return movie
+
+
+def count_long_movies(movies: list[Movie], threshold: int = 120) -> int:
+    """Считает фильмы длиннее threshold минут накоплением счётчика в цикле.
+
+    >>> count_long_movies(movies)
+    4
+    >>> count_long_movies(movies, 130)
+    2
+    """
+    count = 0
+    for movie in movies:
+        if movie["duration_min"] > threshold:
+            count += 1
+    return count
+
+
 def main():
     print("Hello from catalog-analysis!")
 
