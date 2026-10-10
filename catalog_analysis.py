@@ -252,6 +252,51 @@ def titles_sorted_by_rating(movies: list[Movie]) -> list[str]:
     return [movie["title"] for movie in ordered]
 
 
+# --- Этап 6. Словари ---
+
+
+def count_by_genre(movies: list[Movie]) -> dict[str, int]:
+    """Считает число фильмов каждого жанра вручную через dict.get().
+
+    >>> counts = count_by_genre(movies)
+    >>> counts == {"drama": 5, "comedy": 3, "sci-fi": 3,
+    ...            "thriller": 3, "action": 2, "mystery": 1}
+    True
+    """
+    counts: dict[str, int] = {}
+    for movie in movies:
+        for genre in movie["genres"]:
+            counts[genre] = counts.get(genre, 0) + 1
+    return counts
+
+
+def actor_filmography(movies: list[Movie]) -> dict[str, list[str]]:
+    """Строит словарь «актёр — список названий его фильмов».
+
+    >>> actor_filmography(movies)["O. Isaac"]
+    ['The Dune Chronicles', 'Comet Racers', 'The Quiet Algorithm']
+    """
+    filmography: dict[str, list[str]] = {}
+    for movie in movies:
+        for actor in movie["actors"]:
+            filmography.setdefault(actor, []).append(movie["title"])
+    return filmography
+
+
+def above_average_ratings(movies: list[Movie]) -> dict[str, float]:
+    """Возвращает «название — рейтинг» для фильмов выше среднего рейтинга.
+
+    >>> above_average_ratings(movies)["midnight in oslo"]
+    8.9
+    >>> len(above_average_ratings(movies))
+    5
+    """
+    average = average_rating(movies)
+    return {
+        movie["title"]: movie["rating"] for movie in movies if movie["rating"] > average
+    }
+
+
 def main():
     print("Hello from catalog-analysis!")
 
