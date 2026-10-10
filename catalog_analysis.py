@@ -221,6 +221,37 @@ def format_report_line(movie: Movie) -> str:
     )
 
 
+# --- Этап 5. Списки ---
+
+
+def top_movies(movies: list[Movie], n: int = 3) -> list[Movie]:
+    """Возвращает n фильмов с наивысшим рейтингом.
+
+    >>> [movie["title"] for movie in top_movies(movies)]
+    ['The Quiet Algorithm', 'midnight in oslo', 'The Dune Chronicles']
+    """
+    return sorted(movies, key=lambda movie: movie["rating"], reverse=True)[:n]
+
+
+def top_n_by_rating(movies: list[Movie], n: int = 3) -> list[tuple[str, float]]:
+    """Возвращает топ-n кортежей (название, рейтинг) по убыванию рейтинга.
+
+    >>> top_n_by_rating(movies, 2)
+    [('The Quiet Algorithm', 9.2), ('midnight in oslo', 8.9)]
+    """
+    return [(movie["title"], movie["rating"]) for movie in top_movies(movies, n)]
+
+
+def titles_sorted_by_rating(movies: list[Movie]) -> list[str]:
+    """Возвращает названия всех фильмов по убыванию рейтинга, не меняя вход.
+
+    >>> titles_sorted_by_rating(movies)[:3]
+    ['The Quiet Algorithm', 'midnight in oslo', 'The Dune Chronicles']
+    """
+    ordered = sorted(movies, key=lambda movie: movie["rating"], reverse=True)
+    return [movie["title"] for movie in ordered]
+
+
 def main():
     print("Hello from catalog-analysis!")
 
