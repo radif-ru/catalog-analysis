@@ -186,6 +186,41 @@ def count_long_movies(movies: list[Movie], threshold: int = 120) -> int:
     return count
 
 
+# --- Этап 4. Строки ---
+
+
+def normalize_title(title: str) -> str:
+    """Приводит название к виду Title Case вручную, без str.title().
+
+    >>> normalize_title("silent hours")
+    'Silent Hours'
+    """
+    return " ".join(word[0].upper() + word[1:] for word in title.split())
+
+
+def make_slug(title: str) -> str:
+    """Превращает нормализованное название в слаг вида «the-quiet-algorithm».
+
+    >>> make_slug("Silent Hours")
+    'silent-hours'
+    """
+    return title.lower().replace(" ", "-")
+
+
+def format_report_line(movie: Movie) -> str:
+    """Собирает единую строку описания фильма через f-строку.
+
+    >>> format_report_line(movies[7])
+    '"The Quiet Algorithm" (2024) — 9.2/10, 1ч 58м, жанры: drama, sci-fi'
+    """
+    genres = ", ".join(sorted(movie["genres"]))
+    return (
+        f'"{normalize_title(movie["title"])}" ({movie["year"]})'
+        f" — {movie['rating']}/10, {duration_in_hours(movie['duration_min'])},"
+        f" жанры: {genres}"
+    )
+
+
 def main():
     print("Hello from catalog-analysis!")
 
