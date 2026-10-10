@@ -1,5 +1,6 @@
 """Анализ каталога фильмов стримингового сервиса на чистом Python."""
 
+import math
 from typing import TypedDict
 
 
@@ -38,6 +39,43 @@ movies: list[Movie] = [
      "rating": 7.3, "duration_min": 129, "actors": ["P. Diaz", "T. Chalamet"]},
 ]
 # fmt: on
+
+
+# --- Этап 1. Числа и math ---
+
+
+def average_rating(movies: list[Movie]) -> float:
+    """Возвращает средний рейтинг каталога, округлённый до одного знака.
+
+    >>> average_rating(movies)
+    7.2
+    """
+    return round(sum(movie["rating"] for movie in movies) / len(movies), 1)
+
+
+def catalog_age_stats(
+    movies: list[Movie], current_year: int = 2026
+) -> tuple[int, int, int]:
+    """Возвращает возраст самого старого и самого нового фильма и средний.
+
+    Средний возраст округляется вверх до целого числа лет через math.ceil.
+
+    >>> catalog_age_stats(movies)
+    (15, 2, 8)
+    """
+    ages = [current_year - movie["year"] for movie in movies]
+    return max(ages), min(ages), math.ceil(sum(ages) / len(ages))
+
+
+def duration_in_hours(minutes: int) -> str:
+    """Переводит длительность в минутах в строку вида «2ч 35м».
+
+    >>> duration_in_hours(155)
+    '2ч 35м'
+    >>> duration_in_hours(124)
+    '2ч 4м'
+    """
+    return f"{minutes // 60}ч {minutes % 60}м"
 
 
 def main():
